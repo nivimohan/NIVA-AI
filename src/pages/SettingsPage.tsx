@@ -1,11 +1,45 @@
 import { motion } from "framer-motion";
-import { Settings, User, Bell, Shield, Palette } from "lucide-react";
+import { User, Bell, Palette, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const SettingsPage = () => {
+  const { profile, user, signOut } = useAuth();
   const [highContrast, setHighContrast] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [fontSize, setFontSize] = useState(18);
+  const [fullName, setFullName] = useState(profile?.full_name || "");
+  const [age, setAge] = useState(profile?.age?.toString() || "");
+  const [bloodGroup, setBloodGroup] = useState(profile?.blood_group || "");
+  const [emergencyPhone, setEmergencyPhone] = useState(profile?.emergency_phone || "");
+  const [saving, setSaving] = useState(false);
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        full_name: fullName,
+        age: age ? parseInt(age) : null,
+        blood_group: bloodGroup || null,
+        emergency_phone: emergencyPhone || null,
+      })
+      .eq("user_id", user.id);
+    setSaving(false);
+    if (error) {
+      toast.error("Failed to save profile");
+    } else {
+      toast.success("Profile saved!");
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Logged out successfully");
+  };
 
   return (
     <motion.div className="space-y-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -23,20 +57,31 @@ const SettingsPage = () => {
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="text-sm font-medium text-muted-foreground">Full Name</label>
-              <input defaultValue="Naveen Kumar" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
+              <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Age</label>
-              <input defaultValue="65" type="number" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
+              <input value={age} onChange={(e) => setAge(e.target.value)} type="number" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Blood Group</label>
-              <input defaultValue="B+" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
+              <input value={bloodGroup} onChange={(e) => setBloodGroup(e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Emergency Contact</label>
-              <input defaultValue="+91-9876543211" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
+              <input value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
             </div>
+          </div>
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">{user?.email}</p>
+            <motion.button
+              onClick={handleSaveProfile}
+              disabled={saving}
+              className="rounded-lg gradient-primary px-5 py-2 font-medium text-primary-foreground disabled:opacity-50"
+              whileTap={{ scale: 0.98 }}
+            >
+              {saving ? "Saving..." : "Save Profile"}
+            </motion.button>
           </div>
         </div>
 
@@ -60,14 +105,7 @@ const SettingsPage = () => {
             </div>
             <div>
               <p className="font-medium text-foreground">Font Size: {fontSize}px</p>
-              <input
-                type="range"
-                min={16}
-                max={28}
-                value={fontSize}
-                onChange={(e) => setFontSize(+e.target.value)}
-                className="mt-2 w-full accent-primary"
-              />
+              <input type="range" min={16} max={28} value={fontSize} onChange={(e) => setFontSize(+e.target.value)} className="mt-2 w-full accent-primary" />
             </div>
           </div>
         </div>
@@ -90,6 +128,16 @@ const SettingsPage = () => {
             </button>
           </div>
         </div>
+
+        {/* Logout */}
+        <motion.button
+          onClick={handleLogout}
+          className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-destructive bg-destructive/10 py-4 font-medium text-destructive"
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+        >
+          <LogOut className="h-5 w-5" /> Log Out
+        </motion.button>
       </div>
     </motion.div>
   );
