@@ -10,6 +10,7 @@ import {
   Settings,
   Mic,
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -23,6 +24,10 @@ const navItems = [
 
 const Sidebar = () => {
   const location = useLocation();
+  const { profile, user } = useAuth();
+
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const initials = displayName.charAt(0).toUpperCase();
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col gradient-sidebar border-r border-sidebar-border">
@@ -77,10 +82,10 @@ const Sidebar = () => {
       <div className="border-t border-sidebar-border px-4 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-accent text-sm font-bold text-sidebar-primary">
-            N
+            {initials}
           </div>
-          <div>
-            <p className="text-sm font-medium text-sidebar-foreground">Naveen</p>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium text-sidebar-foreground">{displayName}</p>
             <p className="text-xs text-sidebar-foreground/50">Patient</p>
           </div>
         </div>

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import VoiceButton from "@/components/dashboard/VoiceButton";
 import SummaryCard from "@/components/dashboard/SummaryCard";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   LineChart,
   Line,
@@ -27,6 +28,8 @@ const container = {
 
 const Dashboard = () => {
   const { entries, latest } = useHealthData();
+  const { profile, user } = useAuth();
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
 
   const chartData = entries.slice(-7).map((e) => ({
     date: e.date.slice(5),
@@ -45,7 +48,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            Hello, <span className="text-gradient">Naveen</span> 👋
+            Hello, <span className="text-gradient">{displayName}</span> 👋
           </motion.h1>
           <p className="mt-1 text-lg text-muted-foreground">
             Here's your health overview for today
