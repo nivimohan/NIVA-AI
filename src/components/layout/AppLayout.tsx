@@ -12,6 +12,7 @@ const AppLayout = () => {
 
   return (
     <div className="flex min-h-screen">
+      <main className={`flex-1 ${isMobile ? "px-4 pb-8 pt-20" : "ml-64 p-8"}`}>
       {/* Mobile header */}
       {isMobile && (
         <header className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between border-b border-border bg-background px-4 py-3">
