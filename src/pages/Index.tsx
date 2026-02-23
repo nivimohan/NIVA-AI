@@ -29,7 +29,10 @@ const container = {
 const Dashboard = () => {
   const { entries, latest } = useHealthData();
   const { profile, user } = useAuth();
-  const displayName = profile?.full_name || user?.email?.split("@")[0] || "User";
+  const displayName =
+    profile?.full_name ||
+    user?.email?.split("@")[0] ||
+    "User";
 
   const chartData = entries.slice(-7).map((e) => ({
     date: e.date.slice(5),
@@ -39,29 +42,46 @@ const Dashboard = () => {
   }));
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
-      {/* Greeting */}
-      <div className="flex items-center justify-between">
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-6 md:space-y-8"
+    >
+      {/* Greeting Section */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <motion.h1
-            className="font-display text-4xl font-bold text-foreground"
+            className="font-display text-2xl md:text-4xl font-bold text-foreground"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            Hello, <span className="text-gradient">{displayName}</span> 👋
+            Hello,{" "}
+            <span className="text-gradient">
+              {displayName}
+            </span>{" "}
+            👋
           </motion.h1>
-          <p className="mt-1 text-lg text-muted-foreground">
+
+          <p className="mt-1 text-sm md:text-lg text-muted-foreground">
             Here's your health overview for today
           </p>
         </div>
-        <VoiceButton />
+
+        <div className="self-start md:self-auto">
+          <VoiceButton />
+        </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           title="Blood Pressure"
-          value={latest ? `${latest.systolic}/${latest.diastolic}` : "--"}
+          value={
+            latest
+              ? `${latest.systolic}/${latest.diastolic}`
+              : "--"
+          }
           subtitle="mmHg · Last reading"
           icon={Activity}
           trend="stable"
@@ -91,49 +111,113 @@ const Dashboard = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Blood Pressure Chart */}
         <motion.div
-          className="rounded-xl border border-border bg-card p-6 shadow-card"
+          className="rounded-xl border border-border bg-card p-4 md:p-6 shadow-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h3 className="mb-4 font-display text-lg font-semibold text-card-foreground">
+          <h3 className="mb-4 font-display text-base md:text-lg font-semibold text-card-foreground">
             Blood Pressure Trend
           </h3>
-          <ResponsiveContainer width="100%" height={240}>
+
+          <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={chartData}>
               <defs>
-                <linearGradient id="bpGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(174, 62%, 40%)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(174, 62%, 40%)" stopOpacity={0} />
+                <linearGradient
+                  id="bpGrad"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="5%"
+                    stopColor="hsl(174, 62%, 40%)"
+                    stopOpacity={0.3}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="hsl(174, 62%, 40%)"
+                    stopOpacity={0}
+                  />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(200, 20%, 90%)" />
-              <XAxis dataKey="date" tick={{ fontSize: 14 }} stroke="hsl(210, 10%, 50%)" />
-              <YAxis tick={{ fontSize: 14 }} stroke="hsl(210, 10%, 50%)" />
+
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(200, 20%, 90%)"
+              />
+
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12 }}
+                stroke="hsl(210, 10%, 50%)"
+              />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                stroke="hsl(210, 10%, 50%)"
+              />
               <Tooltip />
-              <Area type="monotone" dataKey="bp" stroke="hsl(174, 62%, 40%)" fill="url(#bpGrad)" strokeWidth={2} />
+
+              <Area
+                type="monotone"
+                dataKey="bp"
+                stroke="hsl(174, 62%, 40%)"
+                fill="url(#bpGrad)"
+                strokeWidth={2}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </motion.div>
 
+        {/* Heart Rate & Sugar Chart */}
         <motion.div
-          className="rounded-xl border border-border bg-card p-6 shadow-card"
+          className="rounded-xl border border-border bg-card p-4 md:p-6 shadow-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <h3 className="mb-4 font-display text-lg font-semibold text-card-foreground">
+          <h3 className="mb-4 font-display text-base md:text-lg font-semibold text-card-foreground">
             Heart Rate & Sugar
           </h3>
-          <ResponsiveContainer width="100%" height={240}>
+
+          <ResponsiveContainer width="100%" height={220}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(200, 20%, 90%)" />
-              <XAxis dataKey="date" tick={{ fontSize: 14 }} stroke="hsl(210, 10%, 50%)" />
-              <YAxis tick={{ fontSize: 14 }} stroke="hsl(210, 10%, 50%)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(200, 20%, 90%)"
+              />
+
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12 }}
+                stroke="hsl(210, 10%, 50%)"
+              />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                stroke="hsl(210, 10%, 50%)"
+              />
+
               <Tooltip />
-              <Line type="monotone" dataKey="hr" stroke="hsl(0, 72%, 55%)" strokeWidth={2} dot={false} name="Heart Rate" />
-              <Line type="monotone" dataKey="sugar" stroke="hsl(25, 95%, 55%)" strokeWidth={2} dot={false} name="Sugar" />
+
+              <Line
+                type="monotone"
+                dataKey="hr"
+                stroke="hsl(0, 72%, 55%)"
+                strokeWidth={2}
+                dot={false}
+                name="Heart Rate"
+              />
+              <Line
+                type="monotone"
+                dataKey="sugar"
+                stroke="hsl(25, 95%, 55%)"
+                strokeWidth={2}
+                dot={false}
+                name="Sugar"
+              />
             </LineChart>
           </ResponsiveContainer>
         </motion.div>
