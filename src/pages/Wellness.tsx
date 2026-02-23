@@ -22,25 +22,76 @@ interface DietRow {
 }
 
 // ─── Diet data by preference ───────────────────────────────────
-const vegDiet: DietRow[] = [
-  { day: "Mon", breakfast: "Oats Upma + Green Tea", lunch: "Dal Rice + Sabzi + Curd", dinner: "Chapati + Palak Paneer", snack: "Fruits + Nuts" },
-  { day: "Tue", breakfast: "Idli Sambar", lunch: "Rajma Rice + Salad", dinner: "Khichdi + Buttermilk", snack: "Sprout Chaat" },
-  { day: "Wed", breakfast: "Poha + Chai", lunch: "Chole + Brown Rice", dinner: "Moong Dal Cheela", snack: "Yogurt + Seeds" },
-  { day: "Thu", breakfast: "Besan Cheela + Chutney", lunch: "Sambhar Rice + Papad", dinner: "Roti + Mix Veg Curry", snack: "Makhana" },
-  { day: "Fri", breakfast: "Dalia Porridge", lunch: "Paneer Bhurji + Rice", dinner: "Chapati + Aloo Gobi", snack: "Banana + Peanuts" },
-  { day: "Sat", breakfast: "Paratha + Curd", lunch: "Paneer Tikka + Naan", dinner: "Soup + Grilled Veg", snack: "Chana Chaat" },
-  { day: "Sun", breakfast: "Masala Dosa", lunch: "Veg Biryani + Raita", dinner: "Roti + Dal Fry", snack: "Trail Mix" },
-];
+// Diet plans categorized by BMI range and preference
+const dietPlans: Record<string, Record<string, DietRow[]>> = {
+  underweight: {
+    veg: [
+      { day: "Mon", breakfast: "Paneer Paratha + Lassi", lunch: "Dal Makhani + Jeera Rice + Ghee", dinner: "Chapati + Shahi Paneer + Curd", snack: "Banana Shake + Nuts" },
+      { day: "Tue", breakfast: "Aloo Puri + Halwa", lunch: "Rajma Rice + Papad + Ghee", dinner: "Paneer Butter Masala + Naan", snack: "Dry Fruit Ladoo" },
+      { day: "Wed", breakfast: "Stuffed Paratha + Butter + Curd", lunch: "Chole Bhature + Salad", dinner: "Malai Kofta + Chapati", snack: "Mango Smoothie" },
+      { day: "Thu", breakfast: "Masala Dosa + Coconut Chutney", lunch: "Veg Biryani + Raita + Ghee", dinner: "Paneer Tikka + Roti + Dal", snack: "Peanut Chikki" },
+      { day: "Fri", breakfast: "Poha + Jalebi + Milk", lunch: "Palak Paneer + Rice + Papad", dinner: "Aloo Gobi + Chapati + Curd", snack: "Fruit Custard" },
+      { day: "Sat", breakfast: "Medu Vada + Sambar", lunch: "Kadhi Chawal + Aloo Fry", dinner: "Paneer Do Pyaza + Naan", snack: "Chana Chaat + Buttermilk" },
+      { day: "Sun", breakfast: "Chole Bhature", lunch: "Veg Pulao + Raita + Ghee", dinner: "Dal Fry + Chapati + Salad", snack: "Mixed Nuts + Dates" },
+    ],
+    nonveg: [
+      { day: "Mon", breakfast: "Egg Paratha + Butter + Lassi", lunch: "Chicken Curry + Rice + Ghee", dinner: "Mutton Rogan Josh + Naan", snack: "Boiled Eggs + Nuts" },
+      { day: "Tue", breakfast: "Omelette + Buttered Toast + Milk", lunch: "Fish Curry + Rice + Dal", dinner: "Butter Chicken + Naan", snack: "Chicken Sandwich" },
+      { day: "Wed", breakfast: "Egg Bhurji + Paratha + Curd", lunch: "Mutton Biryani + Raita", dinner: "Egg Curry + Chapati", snack: "Banana Shake + Almonds" },
+      { day: "Thu", breakfast: "French Toast + Honey + Milk", lunch: "Chicken Biryani + Raita + Ghee", dinner: "Keema Paratha + Curd", snack: "Dry Fruit Ladoo" },
+      { day: "Fri", breakfast: "Masala Dosa + Egg", lunch: "Fish Fry + Rice + Dal", dinner: "Chicken Tikka + Roti", snack: "Peanut Butter Toast" },
+      { day: "Sat", breakfast: "Egg Dosa + Chutney", lunch: "Prawn Curry + Rice + Papad", dinner: "Mutton Curry + Chapati", snack: "Boiled Eggs + Fruits" },
+      { day: "Sun", breakfast: "Chicken Sandwich + Juice", lunch: "Hyderabadi Biryani + Raita", dinner: "Dal Fry + Roti + Egg Bhurji", snack: "Mixed Nuts + Dates" },
+    ],
+  },
+  normal: {
+    veg: [
+      { day: "Mon", breakfast: "Oats Upma + Green Tea", lunch: "Dal Rice + Sabzi + Curd", dinner: "Chapati + Palak Paneer", snack: "Fruits + Nuts" },
+      { day: "Tue", breakfast: "Idli Sambar", lunch: "Rajma Rice + Salad", dinner: "Khichdi + Buttermilk", snack: "Sprout Chaat" },
+      { day: "Wed", breakfast: "Poha + Chai", lunch: "Chole + Brown Rice", dinner: "Moong Dal Cheela", snack: "Yogurt + Seeds" },
+      { day: "Thu", breakfast: "Besan Cheela + Chutney", lunch: "Sambhar Rice + Papad", dinner: "Roti + Mix Veg Curry", snack: "Makhana" },
+      { day: "Fri", breakfast: "Dalia Porridge", lunch: "Paneer Bhurji + Rice", dinner: "Chapati + Aloo Gobi", snack: "Banana + Peanuts" },
+      { day: "Sat", breakfast: "Paratha + Curd", lunch: "Paneer Tikka + Roti", dinner: "Soup + Grilled Veg", snack: "Chana Chaat" },
+      { day: "Sun", breakfast: "Masala Dosa", lunch: "Veg Biryani + Raita", dinner: "Roti + Dal Fry", snack: "Trail Mix" },
+    ],
+    nonveg: [
+      { day: "Mon", breakfast: "Egg Bhurji + Toast", lunch: "Chicken Curry + Rice", dinner: "Chapati + Keema", snack: "Boiled Eggs" },
+      { day: "Tue", breakfast: "Idli Sambar", lunch: "Fish Curry + Rice + Salad", dinner: "Chicken Soup + Bread", snack: "Sprout Chaat" },
+      { day: "Wed", breakfast: "Poha + Chai", lunch: "Mutton Biryani + Raita", dinner: "Egg Curry + Chapati", snack: "Yogurt + Seeds" },
+      { day: "Thu", breakfast: "Omelette + Paratha", lunch: "Sambhar Rice + Fish Fry", dinner: "Roti + Butter Chicken", snack: "Makhana" },
+      { day: "Fri", breakfast: "Dalia Porridge", lunch: "Fish Curry + Rice", dinner: "Chapati + Egg Curry", snack: "Banana + Peanuts" },
+      { day: "Sat", breakfast: "Paratha + Curd", lunch: "Chicken Tikka + Roti", dinner: "Soup + Grilled Chicken", snack: "Chana Chaat" },
+      { day: "Sun", breakfast: "Masala Dosa", lunch: "Chicken Biryani + Raita", dinner: "Roti + Dal Fry", snack: "Trail Mix" },
+    ],
+  },
+  overweight: {
+    veg: [
+      { day: "Mon", breakfast: "Moong Sprouts Salad + Green Tea", lunch: "Brown Rice + Dal + Steamed Veggies", dinner: "Roti + Lauki Sabzi", snack: "Cucumber + Lemon Water" },
+      { day: "Tue", breakfast: "Oats Porridge (no sugar) + Seeds", lunch: "Quinoa Salad + Raita", dinner: "Besan Cheela + Mint Chutney", snack: "Roasted Makhana" },
+      { day: "Wed", breakfast: "Vegetable Poha (minimal oil)", lunch: "Moong Dal + Roti + Salad", dinner: "Soup + Grilled Paneer (small)", snack: "Buttermilk + Flaxseeds" },
+      { day: "Thu", breakfast: "Ragi Dosa + Chutney", lunch: "Mixed Veg + Brown Rice + Curd", dinner: "Cabbage Paratha (no ghee)", snack: "Green Tea + Almonds (5)" },
+      { day: "Fri", breakfast: "Idli (2) + Sambar (no oil)", lunch: "Palak Dal + Roti (1)", dinner: "Grilled Veggies + Soup", snack: "Apple + Walnuts (3)" },
+      { day: "Sat", breakfast: "Smoothie (spinach + banana)", lunch: "Chana Salad + Buttermilk", dinner: "Moong Dal Cheela + Salad", snack: "Carrot Sticks + Hummus" },
+      { day: "Sun", breakfast: "Besan Cheela + Green Tea", lunch: "Veg Clear Soup + Roti (1)", dinner: "Khichdi (moong) + Curd", snack: "Roasted Chana" },
+    ],
+    nonveg: [
+      { day: "Mon", breakfast: "Boiled Eggs (2) + Green Tea", lunch: "Grilled Chicken + Brown Rice + Salad", dinner: "Fish Tikka + Roti (1)", snack: "Cucumber + Lemon Water" },
+      { day: "Tue", breakfast: "Egg White Omelette + Toast (1)", lunch: "Chicken Clear Soup + Salad", dinner: "Grilled Fish + Veggies", snack: "Roasted Makhana" },
+      { day: "Wed", breakfast: "Poha (small) + Boiled Egg", lunch: "Fish Curry (no coconut) + Roti (1)", dinner: "Chicken Soup + Salad", snack: "Buttermilk + Flaxseeds" },
+      { day: "Thu", breakfast: "Ragi Dosa + Egg", lunch: "Tandoori Chicken + Salad + Raita", dinner: "Egg Bhurji + Roti (1)", snack: "Green Tea + Almonds (5)" },
+      { day: "Fri", breakfast: "Boiled Eggs (2) + Fruit", lunch: "Fish Fry (air-fried) + Brown Rice", dinner: "Chicken Clear Soup", snack: "Apple + Walnuts (3)" },
+      { day: "Sat", breakfast: "Smoothie (spinach + egg white)", lunch: "Grilled Chicken Salad", dinner: "Egg Curry + Roti (1)", snack: "Carrot Sticks + Hummus" },
+      { day: "Sun", breakfast: "Omelette (1 egg) + Green Tea", lunch: "Chicken Biryani (small) + Raita", dinner: "Fish Soup + Salad", snack: "Roasted Chana" },
+    ],
+  },
+};
 
-const nonVegDiet: DietRow[] = [
-  { day: "Mon", breakfast: "Egg Bhurji + Toast", lunch: "Chicken Curry + Rice", dinner: "Chapati + Keema", snack: "Boiled Eggs" },
-  { day: "Tue", breakfast: "Idli Sambar", lunch: "Fish Curry + Rice + Salad", dinner: "Chicken Soup + Bread", snack: "Sprout Chaat" },
-  { day: "Wed", breakfast: "Poha + Chai", lunch: "Mutton Biryani + Raita", dinner: "Egg Curry + Chapati", snack: "Yogurt + Seeds" },
-  { day: "Thu", breakfast: "Omelette + Paratha", lunch: "Sambhar Rice + Fish Fry", dinner: "Roti + Butter Chicken", snack: "Makhana" },
-  { day: "Fri", breakfast: "Dalia Porridge", lunch: "Fish Curry + Rice", dinner: "Chapati + Egg Curry", snack: "Banana + Peanuts" },
-  { day: "Sat", breakfast: "Paratha + Curd", lunch: "Chicken Tikka + Naan", dinner: "Soup + Grilled Chicken", snack: "Chana Chaat" },
-  { day: "Sun", breakfast: "Masala Dosa", lunch: "Chicken Biryani + Raita", dinner: "Roti + Dal Fry", snack: "Trail Mix" },
-];
+const getBmiCategory = (bmi: number | null): string => {
+  if (!bmi) return "normal";
+  if (bmi < 18.5) return "underweight";
+  if (bmi < 25) return "normal";
+  return "overweight";
+};
 
 const getCalorieAdvice = (bmi: number | null, age: number | null) => {
   if (!bmi || !age) return null;
@@ -262,7 +313,8 @@ const Wellness = () => {
     setExercises((prev) => prev.filter((e) => e.id !== id));
   };
 
-  const dietPlan = dietPref === "veg" ? vegDiet : nonVegDiet;
+  const bmiCategory = getBmiCategory(bmi);
+  const dietPlan = dietPlans[bmiCategory]?.[dietPref] ?? dietPlans.normal.veg;
 
   return (
     <motion.div className="space-y-6 md:space-y-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -372,7 +424,7 @@ const Wellness = () => {
               <div key={ex.id} className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 md:p-4">
                 <span className="text-2xl">{ex.icon}</span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-foreground">{ex.name}</p>
+                  <p className="font-medium text-foreground break-words leading-snug">{ex.name}</p>
                   <p className="text-sm text-muted-foreground">{ex.duration} min · {ex.type}</p>
                 </div>
                 <div className="flex items-center gap-1">
