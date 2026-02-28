@@ -30,7 +30,7 @@ const Sidebar = () => {
   const initials = displayName.charAt(0).toUpperCase();
 
   return (
-    <aside className="flex h-screen w-64 flex-col gradient-sidebar border-r border-sidebar-border md:fixed md:left-0 md:top-0 md:z-40">
+   <aside className="flex h-full w-64 flex-col gradient-sidebar border-r border-sidebar-border md:fixed md:left-0 md:top-0 md:z-40">
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-primary">
