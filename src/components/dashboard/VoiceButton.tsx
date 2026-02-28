@@ -1,39 +1,84 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState, useRef } from "react";
 
 const VoiceButton = () => {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const recognitionRef = useRef<any>(null);
 
-  const toggleVoice = useCallback(() => {
-    if (listening) {
+  const speak = (text: string) => {
+    const synth = window.speechSynthesis;
+    synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN";
+    utterance.pitch = 1;
+    utterance.rate = 1;
+
+    synth.speak(utterance);
+  };
+
+  const handleCommand = (text: string) => {
+    const lower = text.toLowerCase();
+
+    if (lower.includes("blood pressure")) {
+      speak("Your last blood pressure reading was 120 over 80.");
+    } else if (lower.includes("call emergency")) {
+      speak("Calling your emergency contact.");
+      window.location.href = "tel:112";
+    } else if (lower.includes("water")) {
+      speak("You have completed 6 glasses of water today.");
+    } else {
+      speak("Sorry, I did not understand that command.");
+    }
+  };
+
+  const toggleVoice = () => {
+    if (listening && recognitionRef.current) {
+      recognitionRef.current.stop();
       setListening(false);
-      setTranscript("");
       return;
     }
 
-    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
       alert("Speech recognition not supported in this browser.");
       return;
     }
 
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
+    recognitionRef.current = recognition;
 
-    recognition.onstart = () => setListening(true);
-    recognition.onresult = (event: any) => {
-      const result = event.results[event.results.length - 1][0].transcript;
-      setTranscript(result);
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-IN";
+
+    recognition.onstart = () => {
+      setListening(true);
+      setTranscript("");
     };
-    recognition.onend = () => setListening(false);
-    recognition.onerror = () => setListening(false);
+
+    recognition.onresult = (event: any) => {
+      const result = event.results[0][0].transcript;
+      setTranscript(result);
+      handleCommand(result);
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
+
+    recognition.onerror = () => {
+      setListening(false);
+      speak("There was an error with voice recognition.");
+    };
 
     recognition.start();
-  }, [listening]);
+  };
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -41,33 +86,36 @@ const VoiceButton = () => {
         onClick={toggleVoice}
         className={`relative flex h-20 w-20 items-center justify-center rounded-full transition-colors ${
           listening
-            ? "gradient-primary animate-pulse-voice"
+            ? "bg-red-600 text-white animate-pulse"
             : "bg-primary/10 hover:bg-primary/20"
         }`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        aria-label={listening ? "Stop listening" : "Start voice command"}
       >
         {listening ? (
-          <MicOff className="h-8 w-8 text-primary-foreground" />
+          <MicOff className="h-8 w-8" />
         ) : (
           <Mic className="h-8 w-8 text-primary" />
         )}
       </motion.button>
+
       <AnimatePresence>
-        {listening && (
+        {transcript && (
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="text-sm text-muted-foreground"
+            exit={{ opacity: 0 }}
+            className="text-sm text-muted-foreground text-center px-4"
           >
-            {transcript || "Listening… Say \"NIVA\" to activate"}
+            “{transcript}”
           </motion.p>
         )}
       </AnimatePresence>
+
       {!listening && (
-        <p className="text-sm text-muted-foreground">Tap to speak</p>
+        <p className="text-sm text-muted-foreground">
+          Tap and speak a command
+        </p>
       )}
     </div>
   );
