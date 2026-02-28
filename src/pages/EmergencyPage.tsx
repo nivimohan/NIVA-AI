@@ -56,10 +56,13 @@ const EmergencyPage = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <motion.button
-          onClick={() => window.open("tel:112", "_self")}
-          className="flex items-center gap-3 rounded-xl border-2 border-emergency bg-emergency/10 p-5 text-left"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          onClick={() => {
+  if (contacts.length > 0) {
+    window.location.href = `tel:${contacts[0].phone}`;
+  } else {
+    alert("No emergency contacts saved.");
+  }
+}}
         >
           <Phone className="h-8 w-8 text-emergency" />
           <div>
