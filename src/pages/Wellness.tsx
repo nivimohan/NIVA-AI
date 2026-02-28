@@ -539,7 +539,7 @@ const Wellness = () => {
           {dietPlan.map((row) => (
             <div key={row.day} className="rounded-lg border border-border bg-background p-3">
               <p className="mb-2 font-semibold text-primary">{row.day}</p>
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div><span className="text-xs text-muted-foreground">Breakfast</span><p className="text-foreground">{row.breakfast}</p></div>
                 <div><span className="text-xs text-muted-foreground">Lunch</span><p className="text-foreground">{row.lunch}</p></div>
                 <div><span className="text-xs text-muted-foreground">Dinner</span><p className="text-foreground">{row.dinner}</p></div>
