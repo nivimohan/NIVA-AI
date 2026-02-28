@@ -56,20 +56,27 @@ const EmergencyPage = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <motion.button
-          onClick={() => {
-  if (contacts.length > 0) {
-    window.location.href = `tel:${contacts[0].phone}`;
-  } else {
-    alert("No emergency contacts saved.");
-  }
-}}
-        >
-          <Phone className="h-8 w-8 text-emergency" />
-          <div>
-            <p className="font-display text-lg font-bold text-emergency">Call 112</p>
-            <p className="text-sm text-muted-foreground">Emergency ambulance</p>
-          </div>
-        </motion.button>
+  onClick={() => {
+    if (contacts.length > 0) {
+      window.location.href = `tel:${contacts[0].phone}`;
+    } else {
+      alert("No emergency contact saved.");
+    }
+  }}
+  className="flex items-center gap-3 rounded-xl border-2 border-red-500 bg-red-50 p-5 text-left"
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+>
+  <Phone className="h-8 w-8 text-red-600" />
+  <div>
+    <p className="font-display text-lg font-bold text-red-600">
+      Call Emergency Contact
+    </p>
+    <p className="text-sm text-muted-foreground">
+      Instantly call your primary saved contact
+    </p>
+  </div>
+</motion.button>
 
         <motion.button
           onClick={triggerPanic}
