@@ -133,14 +133,45 @@ const EmergencyPage = () => {
               exit={{ height: 0, opacity: 0 }}
               className="mb-4 overflow-hidden"
             >
-              <div className="grid grid-cols-1 gap-3 rounded-lg bg-secondary p-4 sm:grid-cols-3">
-                <input placeholder="Name" value={newContact.name} onChange={(e) => setNewContact((p) => ({ ...p, name: e.target.value }))} className="rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
-                <input placeholder="Phone" value={newContact.phone} onChange={(e) => setNewContact((p) => ({ ...p, phone: e.target.value }))} className="rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
-                <div className="flex gap-2">
-                  <input placeholder="Relation" value={newContact.relationship} onChange={(e) => setNewContact((p) => ({ ...p, relationship: e.target.value }))} className="flex-1 rounded-lg border border-input bg-background px-3 py-2.5 text-base" />
-                  <motion.button onClick={addContact} className="rounded-lg gradient-primary px-4 py-2 text-primary-foreground" whileTap={{ scale: 0.95 }}>Save</motion.button>
-                </div>
-              </div>
+              <div className="flex flex-col gap-3 rounded-lg bg-secondary p-4 md:grid md:grid-cols-3 md:items-end">
+
+  <input
+    placeholder="Name"
+    value={newContact.name}
+    onChange={(e) =>
+      setNewContact((p) => ({ ...p, name: e.target.value }))
+    }
+    className="rounded-lg border border-input bg-background px-3 py-2.5 text-base"
+  />
+
+  <input
+    placeholder="Phone"
+    value={newContact.phone}
+    onChange={(e) =>
+      setNewContact((p) => ({ ...p, phone: e.target.value }))
+    }
+    className="rounded-lg border border-input bg-background px-3 py-2.5 text-base"
+  />
+
+  <div className="flex flex-col gap-2 md:flex-row">
+    <input
+      placeholder="Relation"
+      value={newContact.relationship}
+      onChange={(e) =>
+        setNewContact((p) => ({ ...p, relationship: e.target.value }))
+      }
+      className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-base"
+    />
+
+    <motion.button
+      onClick={addContact}
+      className="w-full md:w-auto rounded-lg gradient-primary px-4 py-2 text-primary-foreground"
+      whileTap={{ scale: 0.95 }}
+    >
+      Save
+    </motion.button>
+  </div>
+</div>
             </motion.div>
           )}
         </AnimatePresence>
